@@ -16,7 +16,7 @@ const addUser = (userName , roomId) => {
         roomId : roomId
     })
 }
-const getAllUsers = (roomId) => {
+const getRoomUsers = (roomId) => {
    return users.filter(user => user.roomId === roomId)
 }
 
@@ -30,7 +30,7 @@ io.on("connection" , socket => {
         addUser(userName , roomId);  
         socket.to(roomId).emit("user-connected" , userName)
 
-        io.emit
+        io.to(roomId).emit("all-users" , getRoomUsers(roomId))
         
     })
 })
