@@ -17,7 +17,11 @@ const addUser = (userName , roomId) => {
     })
 }
 const getRoomUsers = (roomId) => {
-   return users.filter(user => user.roomId === roomId)
+   return users.filter(user => user.roomId == roomId)
+}
+
+const userLeave = (userId) => {
+  users = users.filter(user => user.userName != userId)
 }
 
 io.on("connection" , socket => {
@@ -32,6 +36,12 @@ io.on("connection" , socket => {
 
         io.to(roomId).emit("all-users" , getRoomUsers(roomId))
         
+        socket.on("disconnect" , ()=>{
+            console.log("disconnect");
+            socket.leave(roomId);
+
+        io.to(roomId).emit("all-users" , getRoomUsers(roomId))
+        })
     })
 })
 
